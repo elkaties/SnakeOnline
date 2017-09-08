@@ -33,13 +33,6 @@ public class MainScreen extends JFrame implements KeyListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(menu);
         setVisible(true);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                if (game != null) game.over();
-            }
-        });
     }
 
     public void startLocal() {
@@ -48,7 +41,7 @@ public class MainScreen extends JFrame implements KeyListener {
         GameScreen gameScreen = new GameScreen(this, game, new Dimension(WINDOW_SIZE, WINDOW_SIZE));
         this.game = game;
         this.gameScreen = gameScreen;
-        game.addPropertyChangeListener(gameScreen);
+        game.addPropertyChangeListener(gameScreen); /*метод чтобы добавить слушателя*/
         add(gameScreen);
         game.start();
         addKeyListener(this);
@@ -88,7 +81,6 @@ public class MainScreen extends JFrame implements KeyListener {
     public void toMenu(JPanel from) {
         remove(from);
         add(menu);
-        game.over();
         revalidate();
         repaint();
     }

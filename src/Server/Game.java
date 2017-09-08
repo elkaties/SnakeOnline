@@ -43,7 +43,7 @@ public class Game implements ActionListener {
         snake1 = new ArrayList<>();
         snake2 = new ArrayList<>();
 
-        serverSocket = new ServerSocket(5050);
+        serverSocket = new ServerSocket(5050); /*открыть порт 55 и ожидать на нем подключения*/
         timer = new Timer(100, this);
         setUpGame();
     }
@@ -62,12 +62,12 @@ public class Game implements ActionListener {
         startInputStreamReaderThreads();
         timer.start();
     }
-
+//метод который запускает новые потоки для считывания направления//
     private void startInputStreamReaderThreads() {
         new Thread(() -> {
             try (final ObjectInputStream objectInputStream1 = new ObjectInputStream(connection1.getInputStream())) {
                 while (!gameInformation.isOver()) {
-                    direction1 = (Client.model.Game.Direction) objectInputStream1.readObject();
+                    direction1 = (Client.model.Game.Direction) objectInputStream1.readObject(); //читывает объект который направояет клиент//
                 }
             } catch (Exception e) {
                 try {
@@ -77,7 +77,7 @@ public class Game implements ActionListener {
                 gameOver(SECOND_PLAYER);
             }
         }).start();
-
+//считывает направления второго игрока//
         new Thread(() -> {
             try (final ObjectInputStream objectInputStream2 = new ObjectInputStream(connection2.getInputStream())) {
                 while (!gameInformation.isOver()) {
@@ -94,7 +94,7 @@ public class Game implements ActionListener {
     }
 
     private void getConnect() throws IOException {
-        connection1 = serverSocket.accept();
+        connection1 = serverSocket.accept(); /*блокирующий метод, пока кто нибудь не подключится*/
         System.out.println("Connected First");
         objectOutputStream1 = new ObjectOutputStream(connection1.getOutputStream());
         connection2 = serverSocket.accept();
